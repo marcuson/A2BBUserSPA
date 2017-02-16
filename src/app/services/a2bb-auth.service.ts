@@ -11,8 +11,20 @@ export class A2BBAuthService {
   private _tokenEndpoint = this._idSrvEndpoint + '/connect/token';
   private _jwtTokenHelper = new JwtHelper();
   private _lastBodyParams: URLSearchParams = null;
+  private _lastPass: string = null;
 
   constructor(private _http: Http) { }
+
+  reset(): void {
+    this._accessToken = null;
+    this._refreshToken = null;
+    this._lastBodyParams = null;
+    this._lastPass = null;
+  }
+
+  get lastPass(): string {
+    return this._lastPass;
+  }
 
   private accessToken(): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -73,6 +85,7 @@ export class A2BBAuthService {
 
   getTokens(user: string, password: string, bodyParams: URLSearchParams): Promise<boolean> {
     this._lastBodyParams = bodyParams.clone();
+    this._lastPass = password;
 
     return new Promise<boolean>((resolve, reject) => {
       if (this.isAuthorized()) {
