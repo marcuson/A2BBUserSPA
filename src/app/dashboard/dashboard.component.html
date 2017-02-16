@@ -1,47 +1,27 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-      <h1>Users</h1>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-6">
-      <h4>Registered users</h4>
-
-      <p *ngIf="!users || users.length <= 0">
-        No user registered!
-      </p>
-
-      <table class="table table-hover table-compact">
-        <tbody>
-          <tr *ngFor="let user of users; let i = index;"
-              (click)="selectUser(user)"
-              [class.table-active]="user === selectedUser">
-            <th scope="row">{{ i }}</th>
-            <td>{{ user.userName }}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <button class="btn btn-primary" [disabled]="!selectedUser">Filter in/out</button>
-      <button class="btn btn-primary" [disabled]="!selectedUser" (click)="deleteSelected()">Delete</button>
+      <h1>Change pass</h1>
     </div>
 
-    <div class="col-6">
-      <h4>Create new user</h4>
+    <div class="col-12 col-md-6">
+      <form (ngSubmit)="changePass()" name="changePassForm">
+        <div class="form-group">
+          <label for="oldPass" class="sr-only">Old password</label>
+          <input type="password" id="oldPass" name="oldPass" class="form-control" placeholder="Old password" required autofocus
+          [(ngModel)]="oldPass">
 
-      <div class="form-group">
-        <label for="user" class="sr-only">Username</label>
-        <input type="text" id="user" name="user" class="form-control" placeholder="Username" required autofocus
-            [(ngModel)]="newUserName">
+          <label for="newPass" class="sr-only">New password</label>
+          <input type="password" id="newPass" name="newPass" class="form-control" placeholder="New password" required autofocus
+          [(ngModel)]="newPass">
+        </div>
 
-        <label for="password" class="sr-only">Password</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required
-            [(ngModel)]="newUserPass">
-      </div>
+        <button class="btn btn-primary" type="submit" (submit)="changePass()">Change password</button>
 
-      <button class="btn btn-primary" (click)="createNewUser()">Create user</button>
+        <p>
+          {{ changePassInfo }}
+        </p>
+      </form>
     </div>
   </div>
 
@@ -53,7 +33,65 @@
 
   <div class="row">
     <div class="col-12">
-      <h1>In/Out</h1>
+      <h1>Devices</h1>
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      <h4>Linked devices</h4>
+
+      <p *ngIf="!devices || devices.length <= 0">
+        No devices linked!
+      </p>
+
+      <table *ngIf="devices &amp;&amp; devices.length > 0" class="table table-hover table-compact">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Enabled?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let device of devices; let i = index;"
+          (click)="selectDevice(device)"
+          [class.table-active]="device === selectedDevice">
+          <th scope="row">{{ i }}</th>
+          <td>{{ device.name }}</td>
+          <td>{{ device.enabled }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="btn btn-primary" [disabled]="!selectedDevice" (click)="toggleEnableSelected()">
+      <span *ngIf="!selectedDevice">
+        Enable/Disable
+      </span>
+      <span *ngIf="selectedDevice &amp;&amp; selectedDevice.enabled">
+        Disable
+      </span>
+      <span *ngIf="selectedDevice &amp;&amp; !selectedDevice.enabled">
+        Enable
+      </span>
+    </button>
+  </div>
+
+  <div class="col-6">
+    <h4>Link new device</h4>
+
+    <form (ngSubmit)="startCreateNewDevice()" name="newDeviceForm">
+      <div class="form-group">
+        <label for="devName" class="sr-only">Name</label>
+        <input type="text" id="devName" name="devName" class="form-control" placeholder="Device name" required autofocus
+        [(ngModel)]="newDeviceName">
+      </div>
+
+      <button class="btn btn-primary" type="submit" (submit)="startCreateNewDevice()">Get QRCode for linking</button>
+    </form>
+
+    <p>
+      {{ tempGuid }}
+    </p>
   </div>
 </div>
