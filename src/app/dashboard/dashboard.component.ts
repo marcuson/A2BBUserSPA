@@ -67,6 +67,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  stopCreateNewDevice(): void {
+    this.timerSubscription.unsubscribe();
+    this.tempGuidTimer = null;
+
+    this.newDeviceName = null;
+    this.tempGuid = null;
+  }
+
   startCreateNewDevice(): void {
     const dev: Device = new Device();
     dev.name = this.newDeviceName;
@@ -89,12 +97,7 @@ export class DashboardComponent implements OnInit {
     .then((res) => {
       const isLinked = res.json().payload as boolean;
       if (isLinked) {
-        this.timerSubscription.unsubscribe();
-        this.tempGuidTimer = null;
-
-        this.newDeviceName = null;
-        this.tempGuid = null;
-
+        this.stopCreateNewDevice();
         this.refreshDevices();
       }
     }).catch((err) => {
