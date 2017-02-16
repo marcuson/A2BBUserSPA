@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* -- BOOTSTRAP VARIABLES OVERRIDE -- */
+
+// We override Bootstrap '$green' variable such that it will be displayed as blue!
+// $green: #0000FF !default;
+
+/* -- IMPORT 3RD PARTY LIBS CUSTOMISED WITH ABOVE CONFIGS -- */
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
