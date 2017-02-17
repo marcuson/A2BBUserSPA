@@ -4,6 +4,7 @@ import { Device } from '../models/device';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { Http } from '@angular/http';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,8 @@ export class DashboardComponent implements OnInit {
   devices: Device[];
   oldPass: string;
   newPass: string;
-  changePassInfo = '';
+  changePassInfo: string;
+  newDeviceInfo: string;
   newDeviceName: string;
   selectedDevice: Device;
   tempGuid: string;
@@ -36,18 +38,20 @@ export class DashboardComponent implements OnInit {
       const response = res.json();
 
       if (response.code === 0) {
-        this._a2bbAuthService.reset();
         this._router.navigate(['/login']);
       }
 
       let msg = response.message;
-      if (response.payload) {
-        msg += ' - ' + JSON.stringify(response.payload);
+      if (response.payload && response.payload.errors) {
+        response.payload.errors.forEach(e => {
+          msg += '\n' + e.description;
+        });
       }
+
       this.changePassInfo = msg as string;
     }).catch((err) => {
       if (err.payload !== undefined) {
-        this.changePassInfo = JSON.stringify(err.payload);
+        this.changePassInfo = 'Unknown error: ' + JSON.stringify(err.payload);
       } else {
         this.changePassInfo = 'Unable to change password, please check your old password is ok';
       }
@@ -67,15 +71,20 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  stopCreateNewDevice(): void {
+  stopCreateNewDevice(isLinked: boolean, form?: FormGroup): void {
     this.timerSubscription.unsubscribe();
     this.tempGuidTimer = null;
 
-    this.newDeviceName = null;
     this.tempGuid = null;
+
+    if (form) {
+      form.reset();
+    }
+
+    this.newDeviceInfo = isLinked ? 'Linked!' : null;
   }
 
-  startCreateNewDevice(): void {
+  startCreateNewDevice(form?: FormGroup): void {
     const dev: Device = new Device();
     dev.name = this.newDeviceName;
     dev.enabled = true;
@@ -86,21 +95,25 @@ export class DashboardComponent implements OnInit {
     }).then((res) => {
       this.tempGuid = res.json().payload as string;
       this.tempGuidTimer = Observable.timer(3000, 3000);
-      this.timerSubscription = this.tempGuidTimer.subscribe(t => this.checkNewDeviceLink(t));
+      this.timerSubscription = this.tempGuidTimer
+          .subscribe(t => this.checkNewDeviceLink(form));
+      this.newDeviceInfo = 'Waiting for link, scan QRCode with mobile app...';
     }).catch((err) => {
+      this.newDeviceInfo = 'Unknown error: ' + JSON.stringify(err);
       console.log(err);
     });
   }
 
-  checkNewDeviceLink(t: any): void {
+  checkNewDeviceLink(form?: FormGroup): void {
     this._http.get('http://localhost:5001/api/link/' + this.tempGuid).toPromise()
     .then((res) => {
       const isLinked = res.json().payload as boolean;
       if (isLinked) {
-        this.stopCreateNewDevice();
+        this.stopCreateNewDevice(true, form);
         this.refreshDevices();
       }
     }).catch((err) => {
+      this.newDeviceInfo = 'Unknown error: ' + JSON.stringify(err);
       console.log(err);
     });
   }
@@ -114,7 +127,7 @@ export class DashboardComponent implements OnInit {
 
     this._a2bbAuthService.put('http://localhost:5001/api/me/devices/' +
         this.selectedDevice.id, this.selectedDevice).then((res) => {
-          this.selectedDevice = null;
+      this.selectedDevice = null;
       this.refreshDevices();
     }).catch((err) => {
       console.log(err);
