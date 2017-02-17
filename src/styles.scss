@@ -7,3 +7,9 @@
 
 /* -- IMPORT 3RD PARTY LIBS CUSTOMISED WITH ABOVE CONFIGS -- */
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+/* -- COMMON STYLES -- */
+
+.with-newline {
+  white-space: pre-line;
+}
