@@ -24,9 +24,9 @@ export class QRCodeComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if ('level' in changes ||
-    'padding' in changes ||
-    'size' in changes ||
-    'value' in changes) {
+        'padding' in changes ||
+        'size' in changes ||
+        'value' in changes) {
       this.generate();
     }
   }
@@ -49,7 +49,9 @@ export class QRCodeComponent implements OnChanges {
       imgTagObject.width = this.size;
       imgTagObject.height = this.size;
     } catch (e) {
-      console.error(`Could not generate QR Code: ${e.message}`);
+      const msg = `Could not generate QR Code: ${e.message}`;
+      this.elementRef.nativeElement.innerHTML = msg;
+      console.error(msg);
     }
   }
 }
