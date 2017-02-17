@@ -1,17 +1,29 @@
 <div class="container">
-  <form class="form-signin" (ngSubmit)="signIn()" name="signInForm">
+  <form class="form-signin" (ngSubmit)="signIn()" name="signInForm" #signInFormRef="ngForm">
     <h2 class="form-signin-heading">Please sign in</h2>
 
     <label for="user" class="sr-only">Username</label>
-    <input type="text" id="user" name="user" class="form-control" placeholder="Username" required autofocus [(ngModel)]="user">
+    <input type="text" id="user" name="user" class="form-control"
+        placeholder="Username" required autofocus [(ngModel)]="user" #userRef="ngModel">
 
     <label for="password" class="sr-only">Password</label>
-    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required [(ngModel)]="password">
+    <input type="password" id="password" name="password" class="form-control"
+        placeholder="Password" required [(ngModel)]="password" #passRef="ngModel">
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit" (submit)="signIn()">Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit"
+        [disabled]="!signInFormRef.form.valid">
+      Sign in
+    </button>
 
-    <p>
-      {{info}}
-    </p>
+    <div [hidden]="userRef.valid || userRef.pristine" class="text-danger">
+      Name is required.
+    </div>
+    <div [hidden]="passRef.valid || passRef.pristine" class="text-danger">
+      Password is required.
+    </div>
+
+    <div>
+      {{ info }}
+    </div>
   </form>
 </div>

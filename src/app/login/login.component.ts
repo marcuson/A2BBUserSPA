@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(private _router: Router, private _authService: A2BBAuthService) { }
 
   ngOnInit() {
+    this._authService.reset();
   }
 
   signIn() {
