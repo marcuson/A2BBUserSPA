@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit {
   }
 
   checkNewDeviceLink(form?: FormGroup): void {
-    this._http.get('http://localhost:5001/api/link/' + this.tempGuid).toPromise()
+    this._a2bbAuthService.get('http://localhost:5001/api/link/' + this.tempGuid)
     .then((res) => {
       const isLinked = res.json().payload as boolean;
       if (isLinked) {
