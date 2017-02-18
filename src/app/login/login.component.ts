@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     this.info = 'Authenticating...';
 
     const bodyParams = new URLSearchParams();
-    bodyParams.set('client_id', 'a2bb_api');
+    bodyParams.set('client_id', 'a2bb.ro_api');
     bodyParams.set('scope', 'A2BB_API offline_access');
 
     this._authService.getTokens(this.user, this.password, bodyParams).then((b) => {
