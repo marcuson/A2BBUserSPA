@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, URLSearchParams, RequestOptionsArgs, Response } from '@angular/http';
 import { JwtHelper } from 'angular2-jwt';
+import { Const } from '../const';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class A2BBAuthService {
-  private _idSrvEndpoint = 'http://localhost:5000';
+  private _idSrvEndpoint = Const.ID_SRV_ENDPOINT;
   private _accessToken: string = null;
   private _refreshToken: string = null;
   private _tokenEndpoint = this._idSrvEndpoint + '/connect/token';

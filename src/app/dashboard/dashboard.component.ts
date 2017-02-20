@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 import { FormGroup } from '@angular/forms';
 import { InOut } from '../models/in-out';
+import { Const } from '../const';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,7 +36,7 @@ export class DashboardComponent implements OnInit {
   }
 
   changePass(): void {
-    this._a2bbAuthService.put('http://localhost:5001/api/me/changepass', {
+    this._a2bbAuthService.put(Const.API_ENDPOINT + '/api/me/changepass', {
       oldPassword: this.oldPass,
       newPassword: this.newPass,
     }).then((res) => {
@@ -67,7 +68,7 @@ export class DashboardComponent implements OnInit {
   }
 
   refreshDevices(): void {
-    this._a2bbAuthService.get('http://localhost:5001/api/me/devices').then((res) => {
+    this._a2bbAuthService.get(Const.API_ENDPOINT + '/api/me/devices').then((res) => {
       this.devices = res.json().payload as Device[];
     }).catch((err) => {
       console.log(err);
@@ -93,7 +94,7 @@ export class DashboardComponent implements OnInit {
     dev.name = this.newDeviceName;
     dev.enabled = true;
 
-    this._a2bbAuthService.post('http://localhost:5001/api/me/devices', {
+    this._a2bbAuthService.post(Const.API_ENDPOINT + '/api/me/devices', {
       device: dev,
       password: this._a2bbAuthService.lastPass
     }).then((res) => {
@@ -109,7 +110,7 @@ export class DashboardComponent implements OnInit {
   }
 
   checkNewDeviceLink(form?: FormGroup): void {
-    this._a2bbAuthService.get('http://localhost:5001/api/link/' + this.tempGuid)
+    this._a2bbAuthService.get(Const.API_ENDPOINT + '/api/link/' + this.tempGuid)
     .then((res) => {
       const isLinked = res.json().payload as boolean;
       if (isLinked) {
@@ -129,7 +130,7 @@ export class DashboardComponent implements OnInit {
 
     this.selectedDevice.enabled = !this.selectedDevice.enabled;
 
-    this._a2bbAuthService.put('http://localhost:5001/api/me/devices/' +
+    this._a2bbAuthService.put(Const.API_ENDPOINT + '/api/me/devices/' +
         this.selectedDevice.id, this.selectedDevice).then((res) => {
       this.selectedDevice = null;
       this.refreshDevices();
@@ -139,7 +140,7 @@ export class DashboardComponent implements OnInit {
   }
 
   refreshInOuts(): void {
-    const url = 'http://localhost:5001/api/me/inout' + (this.isFiltered ? ('/' + this.selectedDevice.id) : '');
+    const url = Const.API_ENDPOINT + '/api/me/inout' + (this.isFiltered ? ('/' + this.selectedDevice.id) : '');
     this._a2bbAuthService.get(url).then((res) => {
       this.inOuts = res.json().payload as InOut[];
     }).catch((err) => {
