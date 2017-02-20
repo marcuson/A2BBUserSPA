@@ -91,6 +91,9 @@
               Enable
             </span>
           </button>
+          <button class="btn btn-primary" [disabled]="!selectedDevice" (click)="applyFilter()">
+            Filter in/out
+          </button>
         </div>
       </div>
     </div>
@@ -127,6 +130,52 @@
         </form>
 
         <app-qr-code *ngIf="tempGuid" [value]="tempGuid" [size]="150"></app-qr-code>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h1>In/Outs</h1>
+    </div>
+
+    <div class="col-12">
+      <div class="card card-block">
+        <p *ngIf="!inOuts || inOuts.length <= 0">
+          No in/outs yet!
+        </p>
+
+        <div *ngIf="inOuts &amp;&amp; inOuts.length > 0">
+          <p>
+            <button class="btn btn-primary" (click)="refreshInOuts()">Refresh</button>
+            <button class="btn btn-primary" (click)="clearFilter()" [disabled]="!isFiltered">Clear filter</button>
+          </p>
+
+          <table class="table table-bordered table-hover table-sm">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>Device name</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let inOut of inOuts; let i = index;">
+                <th scope="row">{{ i }}</th>
+                <td><i class="fa fa-fw" [class.fa-sign-in]="inOut.type === 0" [class.fa-sign-out]="inOut.type === 1"></i></td>
+                <td>{{ inOut.device.name }}</td>
+                <td>{{ inOut.onDate }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

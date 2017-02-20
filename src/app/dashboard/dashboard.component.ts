@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs/Rx';
 import { Http } from '@angular/http';
 import { FormGroup } from '@angular/forms';
+import { InOut } from '../models/in-out';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +14,8 @@ import { FormGroup } from '@angular/forms';
 })
 export class DashboardComponent implements OnInit {
   devices: Device[];
+  inOuts: InOut[];
+  isFiltered = false;
   oldPass: string;
   newPass: string;
   changePassInfo: string;
@@ -28,6 +31,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.refreshDevices();
+    this.refreshInOuts();
   }
 
   changePass(): void {
@@ -132,5 +136,24 @@ export class DashboardComponent implements OnInit {
     }).catch((err) => {
       console.log(err);
     });
+  }
+
+  refreshInOuts(): void {
+    const url = 'http://localhost:5001/api/me/inout' + (this.isFiltered ? ('/' + this.selectedDevice.id) : '');
+    this._a2bbAuthService.get(url).then((res) => {
+      this.inOuts = res.json().payload as InOut[];
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  applyFilter(): void {
+    this.isFiltered = true;
+    this.refreshInOuts();
+  }
+
+  clearFilter(): void {
+    this.isFiltered = false;
+    this.refreshInOuts();
   }
 }
