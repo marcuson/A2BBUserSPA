@@ -171,7 +171,7 @@
                 <th scope="row">{{ i }}</th>
                 <td><i class="fa fa-fw" [class.fa-sign-in]="inOut.type === 0" [class.fa-sign-out]="inOut.type === 1"></i></td>
                 <td>{{ inOut.device.name }}</td>
-                <td>{{ inOut.onDate }}</td>
+                <td>{{ inOut.onDate | date:'dd/MM/y HH:mm:ss' }}</td>
               </tr>
             </tbody>
           </table>
