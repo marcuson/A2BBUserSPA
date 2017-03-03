@@ -18,6 +18,11 @@ If you want to know more about TechItalians, see [TechItalia Tuscany MeetUp page
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.28.3.
 
+## Prerequisites
+
+You need to have [NPM](https://www.npmjs.com/) installed (see [installation guide](https://docs.npmjs.com/getting-started/installing-node)). After that, install `angular-cli` globally using this command:  
+`npm install -g angular-cli`
+
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
@@ -40,10 +45,6 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 Before running the tests make sure you are serving the app via `ng serve`.  
 Automatic tests not implemented yet.
 
-## Deploying to GitHub Pages
-
-Run `ng github-pages:deploy` to deploy to GitHub Pages.
-
-## Further help
+## Further help on Angular CLI
 
 To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
