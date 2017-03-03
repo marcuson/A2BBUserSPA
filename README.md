@@ -20,8 +20,10 @@ This project was generated with [angular-cli](https://github.com/angular/angular
 
 ## Prerequisites
 
-You need to have [NPM](https://www.npmjs.com/) installed (see [installation guide](https://docs.npmjs.com/getting-started/installing-node)). After that, install `angular-cli` globally using this command:  
-`npm install -g angular-cli`
+You need to have [NPM](https://www.npmjs.com/) installed (see [installation guide](https://docs.npmjs.com/getting-started/installing-node)). After that, open a terminal and issue this command to install `angular-cli`:  
+`npm install -g @angular/cli@1.0.0-beta.28.3`  
+Then, from the terminal, go to the project root directory and type:  
+`npm install`
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
