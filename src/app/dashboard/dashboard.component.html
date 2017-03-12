@@ -1,0 +1,182 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h1>Change pass</h1>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card card-block">
+        <form (ngSubmit)="changePass()" name="changePassForm" #changePassFormRef="ngForm">
+          <div class="form-group">
+            <label for="oldPass" class="sr-only">Old password</label>
+            <input type="password" id="oldPass" name="oldPass" class="form-control"
+                placeholder="Old password" required autofocus [(ngModel)]="oldPass"
+                #oldPassRef="ngModel">
+          </div>
+
+          <div class="form-group">
+            <label for="newPass" class="sr-only">New password</label>
+            <input type="password" id="newPass" name="newPass" class="form-control"
+                placeholder="New password" required autofocus [(ngModel)]="newPass"
+                #newPassRef="ngModel">
+          </div>
+
+          <button class="btn btn-primary" type="submit"
+              [disabled]="!changePassFormRef.form.valid">
+            Change password
+          </button>
+
+          <div [hidden]="oldPassRef.valid || oldPassRef.pristine" class="text-danger">
+            Old password is required.
+          </div>
+          <div [hidden]="newPassRef.valid || newPassRef.pristine" class="text-danger">
+            New password is required.
+          </div>
+
+          <div *ngIf="changePassInfo" class="with-newline">
+            {{ changePassInfo }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h1>Devices</h1>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <h4>Linked devices</h4>
+
+      <div class="card card-block">
+        <p *ngIf="!devices || devices.length <= 0">
+          No devices linked!
+        </p>
+
+        <table *ngIf="devices &amp;&amp; devices.length > 0" class="table table-bordered table-hover table-sm">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Enabled?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let device of devices; let i = index;"
+            (click)="selectDevice(device)"
+            [class.table-active]="device === selectedDevice">
+              <th scope="row">{{ i }}</th>
+              <td>{{ device.name }}</td>
+              <td>{{ device.enabled }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div>
+          <button class="btn btn-primary" [disabled]="!selectedDevice" (click)="toggleEnableSelected()">
+            <span *ngIf="!selectedDevice">
+              Enable/Disable
+            </span>
+            <span *ngIf="selectedDevice &amp;&amp; selectedDevice.enabled">
+              Disable
+            </span>
+            <span *ngIf="selectedDevice &amp;&amp; !selectedDevice.enabled">
+              Enable
+            </span>
+          </button>
+          <button class="btn btn-primary" [disabled]="!selectedDevice" (click)="applyFilter()">
+            Filter in/out
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <h4>Link new device</h4>
+
+      <div class="card card-block">
+        <form (ngSubmit)="startCreateNewDevice(newDeviceFormRef)" name="newDeviceForm"
+            #newDeviceFormRef="ngForm">
+          <div class="form-group">
+            <label for="devName" class="sr-only">Name</label>
+            <input type="text" id="devName" name="devName" class="form-control"
+                placeholder="Device name" required autofocus
+                [(ngModel)]="newDeviceName" #devNameRef="ngModel">
+          </div>
+
+          <button class="btn btn-primary" type="submit"
+              [disabled]="!newDeviceFormRef.form.valid">
+            Get QRCode for linking
+          </button>
+          <button class="btn btn-primary" [disabled]="!tempGuid"
+              (click)="stopCreateNewDevice(false, newDeviceFormRef)">
+            Stop linking
+          </button>
+
+          <div [hidden]="devNameRef.valid || devNameRef.pristine" class="text-danger">
+            Device name is required.
+          </div>
+
+          <div *ngIf="newDeviceInfo" class="with-newline">
+            {{ newDeviceInfo }}
+          </div>
+        </form>
+
+        <app-qr-code *ngIf="tempGuid" [value]="tempGuid" [size]="150"></app-qr-code>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <hr />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h1>In/Outs</h1>
+    </div>
+
+    <div class="col-12">
+      <div class="card card-block">
+        <p *ngIf="!inOuts || inOuts.length <= 0">
+          No in/outs yet!
+        </p>
+
+        <div>
+          <p>
+            <button class="btn btn-primary" (click)="refreshInOuts()">Refresh</button>
+            <button class="btn btn-primary" (click)="clearFilter()" [disabled]="!isFiltered">Clear filter</button>
+          </p>
+
+          <table class="table table-bordered table-hover table-sm">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Type</th>
+                <th>Device name</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let inOut of inOuts; let i = index;">
+                <th scope="row">{{ i }}</th>
+                <td><i class="fa fa-fw" [class.fa-sign-in]="inOut.type === 0" [class.fa-sign-out]="inOut.type === 1"></i></td>
+                <td>{{ inOut.device.name }}</td>
+                <td>{{ inOut.onDate | date:'dd/MM/y HH:mm:ss' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
